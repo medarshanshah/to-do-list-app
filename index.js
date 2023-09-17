@@ -50,7 +50,11 @@ app.route("/edit/:id")
     .post(async (req, res) => {
         const id = req.params.id;
         try {
-            await TodoTask.findByIdAndUpdate(id, { content: req.body.content });
+            await TodoTask.findByIdAndUpdate(id, 
+                { 
+                    title: req.body.title,
+                    shortDesc: req.body.shortDesc 
+                });
         }
         catch(err) {
             return res.send(500, err);
