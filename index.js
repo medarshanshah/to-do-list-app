@@ -17,8 +17,10 @@ try {
     console.log("Error connecting MongoDB", error);
 }
 
-app.get('/',(req, res) => {
-    res.render("todo.ejs");
+// GET METHOD
+app.get("/", async (req, res) => {
+    const tasks = await TodoTask.find({});
+    res.render("todo.ejs", { todoTasks: tasks });
 });
 
 //POST METHOD
