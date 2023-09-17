@@ -46,10 +46,13 @@ app.route("/edit/:id")
 })
 .post(async (req, res) => {
     const id = req.params.id;
-    await TodoTask.findByIdAndUpdate(id, { 
-        title: req.body.title,
-        desc: req.body.desc 
-    });
-    if (err) return res.send(500, err);
+    try {
+        await TodoTask.findByIdAndUpdate(id, { 
+            title: req.body.title,
+            desc: req.body.desc 
+        });
+    } catch (error) {
+        return res.send(500, error);
+    }
     res.redirect("/");
 });
