@@ -29,7 +29,7 @@ app.get("/", async (req, res) => {
 //POST METHOD
 app.post('/',async (req, res) => {
     const todoTask = new TodoTask({
-    title: req.body.title
+    title: req.body.title,
     shortDesc: req.body.title
     });
     try {

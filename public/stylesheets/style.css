@@ -8,6 +8,10 @@ body {
     background: #196ee5;
 }
 
+label {
+    font-size: 20px;
+}
+
 .todo-container {
     color: white;
     position: absolute;
