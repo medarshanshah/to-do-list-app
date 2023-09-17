@@ -2,6 +2,12 @@ require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
 const TodoTask = require("./models/todotask");
+const { check, validationResult } = require('express-validator');
+
+let validator = [
+    check('title').isString(),
+    check('desc').isString()
+]
 
 const app = express();
 app.use("/static", express.static("public"));
@@ -24,17 +30,19 @@ app.get("/", async (req, res) => {
 });
 
 //POST METHOD
-app.post('/',async (req, res) => {
+app.post('/', validator, async (req, res) => {
     const todoTask = new TodoTask({
         title: req.body.title,
         desc: req.body.desc
     });
     try {
         await todoTask.save();
-        res.redirect("/");
-    } catch (err) {
-        res.redirect("/");
+    } catch (error) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+        return res.send(500, error);
     }
+    res.redirect("/");
 });
 
 //UPDATE
@@ -44,7 +52,7 @@ app.route("/edit/:id")
     const tasks = await TodoTask.find({});
     res.render("todoEdit.ejs", { todoTasks: tasks, idTask: id });
 })
-.post(async (req, res) => {
+.post(validator, async (req, res) => {
     const id = req.params.id;
     try {
         await TodoTask.findByIdAndUpdate(id, { 
@@ -52,6 +60,8 @@ app.route("/edit/:id")
             desc: req.body.desc 
         });
     } catch (error) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
         return res.send(500, error);
     }
     res.redirect("/");
