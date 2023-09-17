@@ -56,3 +56,14 @@ app.route("/edit/:id")
     }
     res.redirect("/");
 });
+
+//DELETE
+app.route("/remove/:id").get(async (req, res) => {
+    const id = req.params.id;
+    try {
+        await TodoTask.findByIdAndRemove(id)
+    } catch (error) {
+        return res.send(500, error);
+    }
+    res.redirect("/");
+});
